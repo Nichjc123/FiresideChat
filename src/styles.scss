@@ -1,3 +1,14 @@
 * {
   box-sizing: border-box;
 }
+
+// Utils
+.flex-cent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.col {
+  flex-direction: column;
+}
