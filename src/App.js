@@ -4,6 +4,9 @@ import { useState } from "react";
 import Header from "./components/Header";
 import SignUpForm from "./components/SignUpForm";
 import SignInForm from "./components/SignInForm";
+import Chatting from "./components/Chatting";
+
+// TODO: USER AUTH WITH MONGO
 
 function App() {
   const [userStatus, setUserStatus] = useState("def");
@@ -20,18 +23,28 @@ function App() {
     );
   };
 
+  const signUserIn = () => {
+    console.log("signed in");
+    setUserStatus("chatting");
+  };
+
+  const signUserUp = () => {
+    console.log("signed up");
+    setUserStatus("chatting");
+  };
+
   const MainContent = () => {
     if (userStatus === "signUp") {
       return (
         <div className="flex-cent col">
-          <SignUpForm />
+          <SignUpForm signUserUp={signUserUp} />
           <BackButton />
         </div>
       );
     } else if (userStatus === "signIn") {
       return (
         <div className="flex-cent col">
-          <SignInForm />
+          <SignInForm signUserIn={signUserIn} />
           <BackButton />
         </div>
       );
@@ -54,6 +67,13 @@ function App() {
           </button>
         </div>
       );
+    } else if (userStatus === "chatting") {
+      return (
+        <div className="flex-cent col">
+          <Chatting />
+          <BackButton />
+        </div>
+      );
     }
   };
 
@@ -66,5 +86,3 @@ function App() {
 }
 
 export default App;
-
-//this will dynamically render either sign up/sign in/chatroom
