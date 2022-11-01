@@ -23,13 +23,50 @@ function App() {
     );
   };
 
-  const signUserIn = () => {
-    console.log("signed in");
-    setUserStatus("chatting");
+  const signUserIn = async (e) => {
+    e.preventDefault();
+    const url = "/users/" + e.target.email.value;
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        if (data.password === e.target.password.value) {
+          setUserStatus("chatting");
+        } else {
+          alert("WRONG PASSWORD");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
-  const signUserUp = () => {
-    console.log("signed up");
+  const signUserUp = async (e) => {
+    e.preventDefault();
+    // Create a user
+    const data = {
+      email: e.target.email.value,
+      name: e.target.name.value,
+      age: e.target.age.value,
+      sexe: e.target.sexe.value,
+      password: e.target.password.value,
+      counselor: e.target.counselor.checked,
+    };
+    fetch("/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
     setUserStatus("chatting");
   };
 
