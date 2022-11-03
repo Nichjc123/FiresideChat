@@ -6,7 +6,6 @@ import SignUpForm from "./components/SignUpForm";
 import SignInForm from "./components/SignInForm";
 import Chatting from "./components/Chatting";
 
-// TODO: USER AUTH WITH MONGO
 
 function App() {
   const [userStatus, setUserStatus] = useState("def");
