@@ -14,7 +14,6 @@ app.use(express.urlencoded({ extended: false }));
 const User = require("./config/model");
 // Main route serving react app
 app.use(express.static(path.join(__dirname, "../frontend/build")));
-// app.use(express.static(path.join(__dirname, "../frontend/public")));
 
 //Get user
 app.get("/users/:email", async (req, res) => {
@@ -36,21 +35,25 @@ app.post("/users", async (req, res) => {
   res.status(200).json(newUser);
 });
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
-
 // #################### WEB SOCKET ###########################
 
-// TODO: for websocket to work we need to serve our reat app from this file!!!!
+// TODO: start implementing web socket use this shit below
 
-// const http = require("http");
-// const server = http.createServer(app);
-// const { Server } = require("socket.io");
-// const io = new Server(server);
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
-// io.on("connection", (socket) => {
-//   console.log("a user connected");
-// });
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+  socket.on("chat message", (msg) => {
+    console.log("message: " + msg);
+  });
+});
 
-// server.listen(4000, () => {
-//   console.log("WS: listening on *:4000");
-// });
+server.listen(port, () => {
+  console.log(`WS: listening on *:${port}`);
+});
