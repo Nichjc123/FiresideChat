@@ -14,7 +14,14 @@ function Screening(props) {
     //if the user is not a counselor get and join available room
     getRoom(navigate, socket);
   }
-  return <div>Screening ...</div>;
+  return (
+    <div class="lds-ellipsis">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  );
 }
 
 export default Screening;
