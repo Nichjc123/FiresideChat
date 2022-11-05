@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Input, SendButton } from "../styled/chat";
 
 function Chatting(props) {
   //State for array of messages and single message
@@ -21,6 +22,7 @@ function Chatting(props) {
       message: message,
       author: props.user.name,
     });
+    setMessage("");
   };
 
   return (
@@ -34,8 +36,8 @@ function Chatting(props) {
           );
         })}
       </ul>
-      <input value={message} onChange={(e) => setMessage(e.target.value)} />
-      <button onClick={sendMessage}>Send</button>
+      <Input value={message} onChange={(e) => setMessage(e.target.value)} />
+      <SendButton onClick={sendMessage}>Send</SendButton>
     </>
   );
 }
