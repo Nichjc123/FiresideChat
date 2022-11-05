@@ -9,8 +9,7 @@ import SignInForm from "./components/auth/SignInForm";
 import Chatting from "./components/websocket/Chatting";
 import Screening from "./components/websocket/Screening";
 import DefaultView from "./components/helpers/DefaultView";
-import BackButton from "./components/helpers/BackButton";
-
+import { MainContainer } from "./components/styled/common";
 //initialize web socket
 const socket = io.connect("http://localhost:8000");
 
@@ -19,7 +18,7 @@ function App(props) {
   const [user, setUser] = useState({});
 
   return (
-    <div className="flx-cent col">
+    <MainContainer>
       <Header />
       <div className="flex-cent col">
         <Routes>
@@ -35,9 +34,8 @@ function App(props) {
             element={<Screening user={user} socket={socket} />}
           />
         </Routes>
-        <BackButton />
       </div>
-    </div>
+    </MainContainer>
   );
 }
 

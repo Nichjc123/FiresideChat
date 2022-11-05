@@ -1,24 +1,25 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { PrimaryButton } from "../styled/common";
 
 function DefaultView() {
   const navigate = useNavigate();
   return (
     <>
-      <button
+      <PrimaryButton
         onClick={() => {
           navigate("/signUp");
         }}
       >
         Sign Up
-      </button>
-      <button
+      </PrimaryButton>
+      <PrimaryButton
         onClick={() => {
           navigate("/signIn");
         }}
       >
         Sign In
-      </button>
+      </PrimaryButton>
     </>
   );
 }

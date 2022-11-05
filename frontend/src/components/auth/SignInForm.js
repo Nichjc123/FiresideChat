@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { handleError } from "../../utils/handleError";
+import BackButton from "../helpers/BackButton";
+import { Input, Form } from "../styled/form";
+import { PrimaryButton } from "../styled/common";
 
 function SignInForm({ setUser }) {
   const navigate = useNavigate();
@@ -25,11 +28,14 @@ function SignInForm({ setUser }) {
   };
 
   return (
-    <form onSubmit={signUserIn} className="flex-cent col">
-      <input type="text" placeholder="email" name="email" />
-      <input type="password" placeholder="password" name="password" />
-      <button type="submit">Submit</button>
-    </form>
+    <>
+      <Form onSubmit={signUserIn} className="flex-cent col">
+        <Input type="text" placeholder="email@gmail.com" name="email" />
+        <Input type="password" placeholder="Password 🤫" name="password" />
+        <PrimaryButton type="submit">Submit</PrimaryButton>
+      </Form>
+      <BackButton />
+    </>
   );
 }
 

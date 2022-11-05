@@ -1,13 +1,13 @@
 import React from "react";
+import { Header1, CenteredColumn } from "../styled/common";
 
 function Header() {
-
   return (
-    <div className="flex-cent col">
+    <CenteredColumn>
       {/* Have a background pic of a fire burning gif type thing */}
-      <h2>Fireside Chat</h2>
-      <p>Come take seat.</p>
-    </div>
+      <Header1>Fireside Chat</Header1>
+      <p>Come take a seat 🏕</p>
+    </CenteredColumn>
   );
 }
 

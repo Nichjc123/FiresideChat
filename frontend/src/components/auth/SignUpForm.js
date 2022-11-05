@@ -2,6 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../utils/createUser";
 import { handleError } from "../../utils/handleError";
+import BackButton from "../helpers/BackButton";
+import { Input, Form } from "../styled/form";
+import { PrimaryButton } from "../styled/common";
 
 function SignUpForm({ setUser }) {
   const navigate = useNavigate();
@@ -30,16 +33,21 @@ function SignUpForm({ setUser }) {
   };
 
   return (
-    <form onSubmit={signUserUp} className="flex-cent col">
-      <input type="text" placeholder="email" name="email" />
-      <input type="text" placeholder="name" name="name" />
-      <input type="number" placeholder="age" name="age" />
-      <input type="text" placeholder="sexe" name="sexe" />
-      <input type="password" placeholder="password" name="password" />
-      <label>Would you like to be a councillor?</label>
-      <input type="checkbox" name="counselor" />
-      <button type="submit">Submit</button>
-    </form>
+    <>
+      <Form onSubmit={signUserUp} className="flex-cent col">
+        <Input type="text" placeholder="Email 📧" name="email" />
+        <Input type="text" placeholder="Name" name="name" />
+        <Input type="number" placeholder="Age 👴" name="age" />
+        <Input type="text" placeholder="Gender" name="sexe" />
+        <Input type="password" placeholder="Password 🤫" name="password" />
+        <div>
+          <label>Would you like to be a counselor?</label>
+          <Input type="checkbox" name="counselor" />
+        </div>
+        <PrimaryButton type="submit">Submit</PrimaryButton>
+      </Form>
+      <BackButton />
+    </>
   );
 }
 
