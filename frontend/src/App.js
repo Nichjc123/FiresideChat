@@ -1,20 +1,25 @@
 import "./styles.css";
 import { useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 //Component imports
 import Header from "./components/Header";
 import SignUpForm from "./components/SignUpForm";
 import SignInForm from "./components/SignInForm";
 import Chatting from "./components/Chatting";
+import Screening from "./components/Screening";
+import io from "socket.io-client";
 
+const socket = io.connect("http://localhost:8000");
 
-function App() {
-  const [userStatus, setUserStatus] = useState("def");
+function App(props) {
+  const [user, setUser] = useState({});
+  const navigate = useNavigate();
 
   const BackButton = () => {
     return (
       <button
         onClick={() => {
-          setUserStatus("def");
+          navigate("/");
         }}
       >
         Back -&gt;
@@ -29,8 +34,9 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        setUser(data);
         if (data.password === e.target.password.value) {
-          setUserStatus("chatting");
+          navigate("/screening");
         } else {
           alert("WRONG PASSWORD");
         }
@@ -61,64 +67,72 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        setUser(data);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
 
-    setUserStatus("chatting");
+    navigate("/screening");
   };
 
-  const MainContent = () => {
-    if (userStatus === "signUp") {
-      return (
-        <div className="flex-cent col">
-          <SignUpForm signUserUp={signUserUp} />
-          <BackButton />
-        </div>
-      );
-    } else if (userStatus === "signIn") {
-      return (
-        <div className="flex-cent col">
-          <SignInForm signUserIn={signUserIn} />
-          <BackButton />
-        </div>
-      );
-    } else if (userStatus === "def") {
-      return (
-        <div className="flex-cent">
-          <button
-            onClick={() => {
-              setUserStatus("signUp");
-            }}
-          >
-            Sign Up
-          </button>
-          <button
-            onClick={() => {
-              setUserStatus("signIn");
-            }}
-          >
-            Sign In
-          </button>
-        </div>
-      );
-    } else if (userStatus === "chatting") {
-      return (
-        <div className="flex-cent col">
-          <Chatting />
-          <BackButton />
-        </div>
-      );
-    }
+  const DefaultView = () => {
+    return (
+      <>
+        <button
+          onClick={() => {
+            navigate("/signUp");
+          }}
+        >
+          Sign Up
+        </button>
+        <button
+          onClick={() => {
+            navigate("/signIn");
+          }}
+        >
+          Sign In
+        </button>
+      </>
+    );
   };
 
   return (
     <div className="flx-cent col">
       <Header />
-      <MainContent />
+      <div className="flex-cent col">
+        <Routes>
+          <Route path="/" element={<DefaultView />} />
+          <Route
+            path="/signUp"
+            element={<SignUpForm signUserUp={signUserUp} />}
+          />
+          <Route
+            path="/signIn"
+            element={<SignInForm signUserIn={signUserIn} />}
+          />
+          <Route
+            path="/chatting"
+            element={<Chatting user={user} socket={socket} />}
+          />
+          <Route
+            path="/screening"
+            element={<Screening user={user} socket={socket} />}
+          />
+        </Routes>
+        <BackButton />
+      </div>
     </div>
   );
 }
+
+/**
+ * * FLOW of the app:
+ * * Once signed in or up they go to screening.
+ * * SCREENING
+ * *   Coucillor immediately get put into a room with 2 digit code. This sends a post request wich adds a room to a db table
+ *
+ * *  Camper calls a get request, if there are no rooms then they need to come back later
+ */
 
 export default App;

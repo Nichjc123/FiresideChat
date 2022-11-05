@@ -1,27 +1,36 @@
-import React from "react";
-import io from "socket.io-client";
+import React, { useState, useEffect } from "react";
 
-function Chatting() {
-  var socket = io();
+function Chatting(props) {
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const socket = props.socket;
 
-  var form = document.getElementById("form");
-  var input = document.getElementById("input");
+  useEffect(() => {
+    socket.on("server_message", (data) => {
+      setMessages([...messages, [data.message, data.author]]);
+    });
+  }, [messages]);
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    if (input.value) {
-      socket.emit("chat message", input.value);
-      input.value = "";
-    }
-  });
+  const sendMessage = () => {
+    socket.emit("client_message", {
+      message: message,
+      author: props.user.name,
+    });
+  };
 
   return (
     <>
-      <ul id="messages"></ul>
-      <form id="form" action="">
-        <input id="input" autocomplete="off" />
-        <button>Send</button>
-      </form>
+      <ul>
+        {messages.map((msg, legend) => {
+          return (
+            <li key={legend}>
+              {msg[1]} says: {msg[0]}
+            </li>
+          );
+        })}
+      </ul>
+      <input value={message} onChange={(e) => setMessage(e.target.value)} />
+      <button onClick={sendMessage}>Send</button>
     </>
   );
 }
