@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { createUser } from "../utils/createUser";
-import { handleError } from "../utils/handleError";
+import { createUser } from "../../utils/createUser";
+import { handleError } from "../../utils/handleError";
 
 function SignUpForm({ setUser }) {
   const navigate = useNavigate();

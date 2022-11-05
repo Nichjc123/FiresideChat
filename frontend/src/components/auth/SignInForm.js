@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { handleError } from "../utils/handleError";
+import { handleError } from "../../utils/handleError";
 
 function SignInForm({ setUser }) {
   const navigate = useNavigate();
