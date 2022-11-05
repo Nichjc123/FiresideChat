@@ -81,13 +81,17 @@ io.on("connection", (socket) => {
   let room;
   console.log(`user connected: ${socket.id}`);
 
+  //Listen for join_room event
   socket.on("join_room", (data) => {
     room = data.toString();
+    //Join the web socket room
     socket.join(room);
     console.log(`joined room ${room}`);
   });
 
+  //When receiving a message from the client
   socket.on("client_message", (data) => {
+    //Emit a server message to all clients in room
     io.to(room).emit("server_message", data);
   });
 });
