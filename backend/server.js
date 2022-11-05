@@ -6,18 +6,20 @@ const port = process.env.SERVER_PORT || 8080;
 const path = require("path");
 const cors = require("cors");
 
+//Connecting to mongo
 connectDB();
 
 const app = express();
 
+//Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
+//Loading models
 const User = require("./config/userModel");
 const Room = require("./config/roomModel");
-// Main route serving react app
-app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 /**
  * USER ROUTES
@@ -27,8 +29,7 @@ app.get("/users/:email", async (req, res) => {
   const searchUser = await User.findOne({ email: req.params.email });
 
   if (!searchUser) {
-    res.status(400);
-    throw new Error("User not found");
+    res.status(400).json("User not found");
   }
 
   res.status(200).json(searchUser);
@@ -42,7 +43,7 @@ app.post("/users", async (req, res) => {
   res.status(200).json(newUser);
 });
 /**
- * ROOM ROUTES
+ * ROOM ROUTES (Websocket rooms)
  */
 //Create room
 app.post("/room", async (req, res) => {
@@ -59,11 +60,12 @@ app.get("/room", async (req, res) => {
   if (!room) {
     res.status(400).json("No available rooms, please try again later");
   } else {
-    //Delete the room with number room.roomNumber
+    //Delete the room so it is no longer available to join
     await Room.deleteOne({ roomNumber: room.roomNumber });
   }
   res.status(200).json(room);
 });
+
 // #################### WEB SOCKET ###########################
 const http = require("http");
 const server = http.createServer(app);
