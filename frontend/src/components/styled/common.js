@@ -43,3 +43,8 @@ export const GoBackButton = styled.div`
     margin-right: 20rem;
   }
 `;
+
+export const CenteredMargin = styled.div`
+  margin: 0 auto;
+  width: fit-content;
+`;

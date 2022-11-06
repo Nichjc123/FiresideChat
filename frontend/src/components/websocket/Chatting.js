@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Input, SendButton } from "../styled/chat";
+import {
+  Input,
+  SendButton,
+  ChatLogContiner,
+  Author,
+  Message,
+} from "../styled/chat";
+import { CenteredMargin } from "../styled/common";
 
 function Chatting(props) {
   //State for array of messages and single message
@@ -8,11 +15,14 @@ function Chatting(props) {
 
   const socket = props.socket;
 
+  //Time for message
+  const date = new Date();
+  const timeString = `${date.getHours()}:${date.getMinutes()}`;
   useEffect(() => {
     //Listening for server response that messages has been sent
     socket.on("server_message", (data) => {
       //Append new message to state
-      setMessages([...messages, [data.message, data.author]]);
+      setMessages([...messages, [data.message, data.author, data.time]]);
     });
   }, [messages, socket]);
 
@@ -21,23 +31,30 @@ function Chatting(props) {
     socket.emit("client_message", {
       message: message,
       author: props.user.name,
+      time: timeString,
     });
     setMessage("");
   };
 
   return (
     <>
-      <ul>
+      <ChatLogContiner>
         {messages.map((msg, legend) => {
           return (
             <li key={legend}>
-              {msg[1]} says: {msg[0]}
+              <Author>
+                <p>{msg[1]}</p>
+                <p>{msg[2]}</p>
+              </Author>
+              <Message>{msg[0]}</Message>
             </li>
           );
         })}
-      </ul>
-      <Input value={message} onChange={(e) => setMessage(e.target.value)} />
-      <SendButton onClick={sendMessage}>Send</SendButton>
+      </ChatLogContiner>
+      <CenteredMargin>
+        <Input value={message} onChange={(e) => setMessage(e.target.value)} />
+        <SendButton onClick={sendMessage}>Send</SendButton>
+      </CenteredMargin>
     </>
   );
 }

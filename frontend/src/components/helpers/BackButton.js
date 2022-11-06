@@ -8,7 +8,7 @@ function BackButton() {
   return (
     <GoBackButton
       onClick={() => {
-        navigate("/chatting");
+        navigate("/");
       }}
     >
       <AiOutlineArrowLeft />
