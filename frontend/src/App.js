@@ -11,7 +11,7 @@ import Screening from "./components/websocket/Screening";
 import DefaultView from "./components/helpers/DefaultView";
 import { MainContainer } from "./components/styled/common";
 //initialize web socket
-const socket = io.connect("http://localhost:8000");
+const socket = io.connect();
 
 function App(props) {
   //user state
