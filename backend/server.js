@@ -18,11 +18,6 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-app.get("*", (req, res) =>
-  res.sendFile(
-    path.resolve(__dirname, "../", "frontend", "build", "index.html")
-  )
-);
 //Loading models
 const User = require("./config/userModel");
 const Room = require("./config/roomModel");
@@ -71,6 +66,12 @@ app.get("/room", async (req, res) => {
   }
   res.status(200).json(room);
 });
+
+app.get("*", (req, res) =>
+  res.sendFile(
+    path.resolve(__dirname, "../", "frontend", "build", "index.html")
+  )
+);
 
 // #################### WEB SOCKET ###########################
 const http = require("http");
