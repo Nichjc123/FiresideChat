@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Input,
   SendButton,
@@ -7,8 +7,10 @@ import {
   Message,
 } from "../styled/chat";
 import { CenteredMargin } from "../styled/common";
+import BackButton from "../helpers/BackButton";
 
 function Chatting(props) {
+  const bottomRef = useRef(null);
   //State for array of messages and single message
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -24,6 +26,8 @@ function Chatting(props) {
       //Append new message to state
       setMessages([...messages, [data.message, data.author, data.time]]);
     });
+    //Scroll to bottom
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, socket]);
 
   //Emit a client message
@@ -39,22 +43,35 @@ function Chatting(props) {
   return (
     <>
       <ChatLogContiner>
-        {messages.map((msg, legend) => {
-          return (
-            <li key={legend}>
-              <Author>
-                <p>{msg[1]}</p>
-                <p>{msg[2]}</p>
-              </Author>
-              <Message>{msg[0]}</Message>
-            </li>
-          );
+        {messages.map((msg, legend, { length }) => {
+          if (legend + 1 === length) {
+            return (
+              <li ref={bottomRef} key={legend}>
+                <Author>
+                  <p>{msg[1]}</p>
+                  <p>{msg[2]}</p>
+                </Author>
+                <Message>{msg[0]}</Message>
+              </li>
+            );
+          } else {
+            return (
+              <li key={legend}>
+                <Author>
+                  <p>{msg[1]}</p>
+                  <p>{msg[2]}</p>
+                </Author>
+                <Message>{msg[0]}</Message>
+              </li>
+            );
+          }
         })}
       </ChatLogContiner>
       <CenteredMargin>
         <Input value={message} onChange={(e) => setMessage(e.target.value)} />
         <SendButton onClick={sendMessage}>Send</SendButton>
       </CenteredMargin>
+      <BackButton />
     </>
   );
 }

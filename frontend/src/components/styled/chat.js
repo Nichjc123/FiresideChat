@@ -13,7 +13,7 @@ export const Input = styled.input`
   border-bottom: 3px solid #ff8e00;
   outline: none;
   &:focus {
-    transform: scale(1.07);
+    transform: scale(1.05);
   }
 `;
 
